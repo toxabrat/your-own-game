@@ -1,0 +1,196 @@
+.votingContainer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.9);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.votingStatus {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #fff;
+}
+
+.votingStatus h3 {
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: #3498db;
+}
+
+.votingStatus p {
+  font-size: 18px;
+  opacity: 0.8;
+}
+
+.playersGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  max-width: 800px;
+  width: 100%;
+  margin-bottom: 30px;
+}
+
+.playerVoteCard {
+  background: rgba(52, 152, 219, 0.1);
+  border: 2px solid #3498db;
+  border-radius: 15px;
+  padding: 20px;
+  text-align: center;
+  color: #fff;
+  transition: all 0.3s ease;
+}
+
+.playerVoteCard:hover {
+  background: rgba(52, 152, 219, 0.2);
+  transform: translateY(-2px);
+}
+
+.playerName {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 15px;
+}
+
+.voteBtn {
+  background: rgba(46, 204, 113, 0.8);
+  border: 2px solid #2ecc71;
+  border-radius: 10px;
+  padding: 12px 20px;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.voteBtn:hover {
+  background: rgba(46, 204, 113, 1);
+  transform: translateY(-2px);
+}
+
+.cannotVote {
+  color: #e74c3c;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.votedStatus {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.votedFor {
+  color: #2ecc71;
+}
+
+.votedForOther {
+  color: #e74c3c;
+}
+
+.resultsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  max-width: 800px;
+  width: 100%;
+  margin-bottom: 30px;
+}
+
+.resultCard {
+  background: rgba(52, 152, 219, 0.1);
+  border: 2px solid #3498db;
+  border-radius: 15px;
+  padding: 20px;
+  text-align: center;
+  color: #fff;
+  transition: all 0.3s ease;
+}
+
+.resultCard.maxVotes {
+  background: rgba(231, 76, 60, 0.2);
+  border-color: #e74c3c;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(231, 76, 60, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(231, 76, 60, 0);
+  }
+}
+
+.voteCount {
+  font-size: 24px;
+  font-weight: 700;
+  margin: 10px 0;
+  color: #f39c12;
+}
+
+.eliminated {
+  color: #e74c3c;
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.eliminateHint {
+  color: #e74c3c;
+  font-weight: 600;
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+.votingBtn {
+  padding: 15px 30px;
+  border-radius: 10px;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  color: #fff;
+}
+
+.votingBtn.startVoting {
+  background: rgba(46, 204, 113, 0.8);
+  border: 2px solid #2ecc71;
+}
+
+.votingBtn.startVoting:hover {
+  background: rgba(46, 204, 113, 1);
+  transform: translateY(-2px);
+}
+
+.votingBtn.endVoting {
+  background: rgba(243, 156, 18, 0.8);
+  border: 2px solid #f39c12;
+}
+
+.votingBtn.endVoting:hover {
+  background: rgba(243, 156, 18, 1);
+  transform: translateY(-2px);
+}
+
+.votingBtn.eliminate {
+  background: rgba(231, 76, 60, 0.8);
+  border: 2px solid #e74c3c;
+}
+
+.votingBtn.eliminate:hover {
+  background: rgba(231, 76, 60, 1);
+  transform: translateY(-2px);
+}

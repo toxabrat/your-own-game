@@ -1,0 +1,322 @@
+.wrapper {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background: url('../assets/main-room.jpg') no-repeat center center;
+  background-size: cover;
+}
+
+.leftPanel {
+  position: absolute;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+}
+
+.scoreOvals {
+  display: flex;
+  flex-direction: column-reverse; 
+  gap: 8px;
+}
+
+.scoreOval {
+  width: 120px;
+  height: 60px;
+  background: linear-gradient(145deg, #2c3e50, #34495e);
+  border-radius: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 
+    0 4px 8px rgba(0,0,0,0.3),
+    inset 0 2px 4px rgba(255,255,255,0.1);
+  border: 2px solid #34495e;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.scoreOval::before {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  right: 2px;
+  bottom: 2px;
+  background: linear-gradient(145deg, #3498db, #2980b9);
+  border-radius: 28px;
+  z-index: -1;
+}
+
+.scoreOval.active {
+  background: linear-gradient(145deg, #e74c3c, #c0392b);
+  border-color: #e74c3c;
+  box-shadow: 
+    0 6px 12px rgba(231, 76, 60, 0.4),
+    inset 0 2px 4px rgba(255,255,255,0.2);
+  transform: scale(1.05);
+}
+
+.scoreOval.active::before {
+  background: linear-gradient(145deg, #e74c3c, #c0392b);
+}
+
+.ovalValue {
+  font-size: 18px;
+  font-weight: 800;
+  color: #ffffff;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+  margin-bottom: 2px;
+}
+
+.ovalLabel {
+  font-size: 12px;
+  font-weight: 700;
+  color: #ecf0f1;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+}
+
+.timerPanel {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  z-index: 10;
+}
+
+.timer {
+  background: rgba(0,0,0,0.8);
+  border-radius: 15px;
+  padding: 16px;
+  backdrop-filter: blur(10px);
+  border: 2px solid #3498db;
+}
+
+.timerDisplay {
+  font-size: 32px;
+  font-weight: 900;
+  color: #ffffff;
+  text-align: center;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+  font-family: 'Courier New', monospace;
+}
+
+.topSection {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 1200px;
+  z-index: 10;
+}
+
+.playersSemicircle {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 30px;
+  position: relative;
+  height: 180px;
+}
+
+.playerOval {
+  position: absolute;
+  width: 100px;
+  height: 80px;
+  background: linear-gradient(145deg, #34495e, #2c3e50);
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 
+    0 4px 8px rgba(0,0,0,0.3),
+    inset 0 2px 4px rgba(255,255,255,0.1);
+  border: 2px solid #34495e;
+  transition: all 0.3s ease;
+}
+
+.playerOval.currentPlayer {
+  background: linear-gradient(145deg, #e74c3c, #c0392b);
+  border-color: #e74c3c;
+  box-shadow: 
+    0 6px 12px rgba(231, 76, 60, 0.4),
+    inset 0 2px 4px rgba(255,255,255,0.2);
+  transform: scale(1.1);
+}
+
+.playerOval::before {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  right: 2px;
+  bottom: 2px;
+  background: linear-gradient(145deg, #3498db, #2980b9);
+  border-radius: 48px;
+  z-index: -1;
+}
+
+.playerOval.currentPlayer::before {
+  background: linear-gradient(145deg, #e74c3c, #c0392b);
+}
+
+.player1 { left: 12%; top: 80%; }      
+.player2 { left: 22%; top: 60%; }     
+.player3 { left: 32%; top: 40%; }     
+.player4 { left: 42%; top: 30%; }     
+.player5 { left: 52%; top: 30%; }     
+.player6 { left: 62%; top: 40%; }     
+.player7 { left: 72%; top: 60%; }     
+.player8 { left: 82%; top: 80%; }     
+
+.playerName {
+  font-size: 14px;
+  font-weight: 700;
+  color: #ffffff;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+  text-align: center;
+}
+
+.questionSection {
+  display: flex;
+  justify-content: center;
+  margin-top: 10%;
+}
+
+.questionCard {
+  background: rgba(0,0,0,0.8);
+  border-radius: 20px;
+  padding: 40px 50px; 
+  backdrop-filter: blur(10px);
+  border: 2px solid #3498db;
+  width: 1000px; 
+  min-height: 250px; 
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.questionText {
+  font-size: 32px; 
+  font-weight: 700;
+  color: #ffffff;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+  margin: 0 0 24px 0; 
+  line-height: 1.4;
+  max-height: 140px; 
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+.readySubtext {
+  color: #f39c12;
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.navBack {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+}
+
+.backBtn {
+  padding: 12px 24px;
+  background: rgba(0,0,0,0.8);
+  border: 2px solid #3498db;
+  border-radius: 25px;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+.backBtn:hover {
+  background: rgba(52, 152, 219, 0.8);
+  transform: translateY(-2px);
+}
+
+.errorMessage, .loadingMessage {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.9);
+  border: 2px solid #e74c3c;
+  border-radius: 20px;
+  padding: 40px;
+  text-align: center;
+  color: #fff;
+  max-width: 400px;
+  width: 90%;
+}
+
+.loadingMessage {
+  border-color: #3498db;
+}
+
+.errorMessage h2, .loadingMessage h2 {
+  color: #e74c3c;
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.loadingMessage h2 {
+  color: #3498db;
+}
+
+.errorMessage p, .loadingMessage p {
+  font-size: 16px;
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+.errorMessage button {
+  background: rgba(231, 76, 60, 0.8);
+  border: 2px solid #e74c3c;
+  border-radius: 10px;
+  padding: 12px 24px;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.errorMessage button:hover {
+  background: rgba(231, 76, 60, 1);
+  transform: translateY(-2px);
+}
+
+.gameInfo {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: rgba(0, 0, 0, 0.8);
+  border: 2px solid #3498db;
+  border-radius: 15px;
+  padding: 16px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.infoItem {
+  margin-bottom: 8px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.infoItem:last-child {
+  margin-bottom: 0;
+}
