@@ -11,7 +11,10 @@ class SocketService {
 
   connect() {
     if (this.socket) return;
-    this.socket = io(import.meta.env.VITE_BACKEND_URL || 'http://localhost:3001', {
+    const backendUrl = import.meta.env.DEV 
+      ? 'http://localhost:3001' 
+      : window.location.origin;
+    this.socket = io(backendUrl, {
       transports: ['websocket', 'polling']
     });
 
