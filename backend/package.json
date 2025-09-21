@@ -1,5 +1,5 @@
 {
-  "name": "weakest-link-backend",
+  "name": "backend",
   "version": "1.0.0",
   "description": "Backend для игры 'Слабое звено'",
   "main": "src/index.js",
