@@ -9,10 +9,8 @@
   ],
   "scripts": {
     "dev": "concurrently \"pnpm --filter backend dev\" \"pnpm --filter frontend dev\"",
-    "build": "pnpm --filter frontend build && pnpm --filter backend build",
-    "start": "pnpm --filter backend start",
-    "lint": "pnpm --filter frontend lint && pnpm --filter backend lint",
-    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,md}\""
+    "build": "pnpm --filter frontend build",
+    "start": "pnpm run dev"
   },
   "devDependencies": {
     "concurrently": "^8.2.2",

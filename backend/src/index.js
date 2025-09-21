@@ -1,11 +1,16 @@
 import express from 'express';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 import { config } from './utils/config.js';
 import { setupConnectionHandlers } from './handlers/connectionHandlers.js';
 import { setupGameHandlers } from './handlers/gameHandlers.js';
 import { setupDuelHandlers } from './handlers/duelHandlers.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 const server = createServer(app);
@@ -14,6 +19,12 @@ const io = new Server(server, {
     origin: config.CORS_ORIGIN,
     methods: ["GET", "POST"]
   }
+});
+
+app.use(express.static(path.join(__dirname, '../../frontend/dist')));
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../../frontend/dist/index.html'));
 });
 
 const connectionHandlers = setupConnectionHandlers(io);
