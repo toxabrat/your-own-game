@@ -4,7 +4,13 @@ export function setupConnectionHandlers(io) {
   return {
     joinGame: (socket, { gameId, playerName, isLeader = false }) => {
       let room = getGameRoom(gameId);
-      if (!room) {
+
+      if (!room && !isLeader) {
+        socket.emit('joinError', { message: 'Game room does not exist' });
+        return;
+      }
+      
+      if (!room && isLeader) {
         room = createGameRoom(gameId);
       }
       
@@ -19,6 +25,10 @@ export function setupConnectionHandlers(io) {
         if (existingPlayer) {
           existingPlayer.id = socket.id;
           existingPlayer.isConnected = true;
+          room.cancelDisconnectTimer(socket.id);
+          if (isLeader && existingPlayer.isLeader) {
+            room.leader = socket.id;
+          }
         } else {
           room.addPlayer(socket.id, playerName, isLeader);
         }
@@ -41,18 +51,22 @@ export function setupConnectionHandlers(io) {
       if (room) {
         let playerName = "";
         if (room.players.has(socket.id)) {
-          playerName = room.players.get(socket.id).name;
+          const player = room.players.get(socket.id);
+          playerName = player.name;
+          player.isConnected = false;
         }
-        const gameState = room.removePlayer(socket.id);
         socket.leave(gameId);
 
         if (room.players.has(socket.id) && isGameStarted(gameId) && idPlayersInRoom.get(gameId).has(playerName)) {
           removePlayerFromGame(gameId, playerName);
         }
         io.to(gameId).emit('playerLeft', { playerId: socket.id });
+        
+        const gameState = room.getGameState();
         io.to(gameId).emit('gameStateUpdate', gameState);
         
-        if (room.players.size === 0) {
+        const connectedPlayers = Array.from(room.players.values()).filter(p => p.isConnected);
+        if (connectedPlayers.length === 0) {
           deleteGameRoom(gameId);
         }
       }
@@ -82,21 +96,25 @@ export function setupConnectionHandlers(io) {
     disconnect: (socket) => {
       for (const [gameId, room] of gameRooms) {
         if (room.players.has(socket.id)) {
-          if (room.gameState === 'duel' || room.gameState === 'duel_ready') {
-            const player = room.players.get(socket.id);
-            if (player) {
-              player.isConnected = false;
-            }
-            io.to(gameId).emit('gameStateUpdate', room.getGameState());
-          } else {
-            const gameState = room.removePlayer(socket.id);
-            io.to(gameId).emit('playerLeft', { playerId: socket.id });
-            io.to(gameId).emit('gameStateUpdate', gameState);
+          const player = room.players.get(socket.id);
+          if (player) {
+            player.isConnected = false;
+            room.setDisconnectTimer(socket.id, () => {
+              if (room.players.has(socket.id) && !room.players.get(socket.id).isConnected) {
+                room.removePlayer(socket.id);
+                io.to(gameId).emit('playerLeft', { playerId: socket.id });
+                
+                const gameState = room.getGameState();
+                io.to(gameId).emit('gameStateUpdate', gameState);
+                if (room.players.size === 0) {
+                  deleteGameRoom(gameId);
+                }
+              }
+            }, 5000);
           }
           
-          if (room.players.size === 0) {
-            deleteGameRoom(gameId);
-          }
+          const gameState = room.getGameState();
+          io.to(gameId).emit('gameStateUpdate', gameState);
           break;
         }
       }

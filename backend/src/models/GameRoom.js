@@ -8,7 +8,8 @@ export class GameRoom {
   constructor(gameId) {
     this.gameId = gameId;
     this.players = new Map(); 
-    this.leader = null; 
+    this.leader = null;
+    this.disconnectTimers = new Map(); 
     this.currentQuestionIndex = 0;
     this.currentScoreLevel = -1; 
     this.bank = 0; 
@@ -75,6 +76,11 @@ export class GameRoom {
 
   removePlayer(socketId) {
     this.players.delete(socketId);
+    if (this.disconnectTimers.has(socketId)) {
+      clearTimeout(this.disconnectTimers.get(socketId));
+      this.disconnectTimers.delete(socketId);
+    }
+    
     if (this.leader === socketId && this.players.size > 0) {
       const firstPlayer = this.players.keys().next().value;
       this.leader = firstPlayer;
@@ -84,11 +90,27 @@ export class GameRoom {
     return this.getGameState();
   }
 
+  setDisconnectTimer(socketId, callback, delay) {
+    if (this.disconnectTimers.has(socketId)) {
+      clearTimeout(this.disconnectTimers.get(socketId));
+    }
+    
+    const timer = setTimeout(callback, delay);
+    this.disconnectTimers.set(socketId, timer);
+  }
+
+  cancelDisconnectTimer(socketId) {
+    if (this.disconnectTimers.has(socketId)) {
+      clearTimeout(this.disconnectTimers.get(socketId));
+      this.disconnectTimers.delete(socketId);
+    }
+  }
+
   getGameState() {
-    const regularPlayers = Array.from(this.players.values()).filter(p => !p.isLeader && p.isConnected);
+    const regularPlayers = Array.from(this.players.values()).filter(p => !p.isLeader);
     const activePlayers = Array.from(this.players.values()).filter(p => !p.isLeader && p.isActive && p.isConnected);
     
-    return {
+    const state = {
       gameId: this.gameId,
       players: regularPlayers,
       allPlayers: Array.from(this.players.values()),
@@ -115,11 +137,12 @@ export class GameRoom {
       duelPlayerOrder: this.duelPlayerOrder,
       currentDuelPlayerIndex: this.currentDuelPlayerIndex
     };
+    return state;
   }
 
   startTimer(io) {
     if (this.isTimerRunning) return;
-    if (this.gameState === 'ready') {
+    if (this.gameState === 'ready' || this.gameState === 'waiting') {
       this.gameState = 'playing';
       this.currentScoreLevel = -1;
       this.currentPlayerIndex = 0;

@@ -53,6 +53,27 @@ const MyBeginingRoom = () => {
         setIsConnecting(false);
       });
 
+      socketService.socket.once('joinError', (error) => {
+        console.error('Join error:', error);
+        setError(error.message || 'Error joining game');
+        setIsConnecting(false);
+      });
+
+      const timeout = setTimeout(() => {
+        setError('Connection timeout - server not responding');
+        setIsConnecting(false);
+      }, 10000);
+
+      socketService.socket.once('gameJoined', () => {
+        clearTimeout(timeout);
+      });
+      socketService.socket.once('connect_error', () => {
+        clearTimeout(timeout);
+      });
+      socketService.socket.once('joinError', () => {
+        clearTimeout(timeout);
+      });
+
     } catch (error) {
       console.error('Error joining game:', error);
       setError('Error joining game');

@@ -101,8 +101,10 @@ const MyLeadingGameRoom = () => {
     answer: "Загрузка ответа..."
   };
 
-  const isReadyState = gameState?.gameState === 'ready';
+  const isReadyState = gameState?.gameState === 'ready' || gameState?.gameState === 'waiting';
   const isPlayingState = gameState?.gameState === 'playing';
+  const isLeader = gameState?.leader === socketService.getSocketId();
+  
 
   const activePlayers = gameState?.players?.filter(p => p.isActive !== false) || [];
   const players = activePlayers.map(p => p.name);
@@ -215,35 +217,35 @@ const MyLeadingGameRoom = () => {
           <button 
             className={`${styles.ctrlBtn} ${styles.primary}`} 
             onClick={isTimerRunning ? handleRestartTimer : handleStartTimer}
-            disabled={!isReadyState && !isTimerRunning}
+            disabled={!isLeader || (!isReadyState && !isTimerRunning)}
           >
             {isTimerRunning ? 'Перезапустить таймер' : isReadyState ? 'Начать вопросы' : 'Таймер'}
           </button>
           <button 
             className={`${styles.ctrlBtn} ${styles.success}`} 
             onClick={handleBank}
-            disabled={currentScoreLevel < 0 || !isPlayingState}
+            disabled={!isLeader || currentScoreLevel < 0 || !isPlayingState}
           >
             Банк
           </button>
           <button 
             className={`${styles.ctrlBtn} ${styles.nextQuestion}`} 
             onClick={handleNextQuestion}
-            disabled={!isPlayingState}
+            disabled={!isLeader || !isPlayingState}
           >
             Следующий вопрос
           </button>
           <button 
             className={`${styles.ctrlBtn} ${canStartVoating ? styles.danger : ''}`} 
             onClick={startVoting}
-            disabled={!canStartVoating}
+            disabled={!isLeader || !canStartVoating}
           >
             Начать голосование
           </button>
           <button 
             className={`${styles.ctrlBtn} ${styles.duel} ${canStartDuel ? styles.duelActive : ''}`} 
             onClick={handleStartDuel}
-            disabled={!canStartDuel}
+            disabled={!isLeader || !canStartDuel}
           >
             Начать дуэль
           </button>
@@ -253,14 +255,14 @@ const MyLeadingGameRoom = () => {
           <button 
             className={`${styles.ctrlBtn} ${styles.correct}`} 
             onClick={handleCorrect}
-            disabled={!isPlayingState}
+            disabled={!isLeader || !isPlayingState}
           >
             ✅ Верно
           </button>
           <button 
             className={`${styles.ctrlBtn} ${styles.incorrect}`} 
             onClick={handleIncorrect}
-            disabled={!isPlayingState}
+            disabled={!isLeader || !isPlayingState}
           >
             ❌ Неверно
           </button>
